@@ -115,6 +115,20 @@ class CommentsState extends State<Comments> {
       'avatarUrl': currentUser.photoUrl,
       'userId': currentUser.id
     });
+    // checking if current user id is different than user post id
+    bool isNotPostOwner = postOwnerId != currentUser.id;
+    if (isNotPostOwner) {
+      actividyFeedRef.doc(postOwnerId).collection('feedItems').add({
+        'type': 'comment',
+        'commentData': _commentController.text,
+        'username': currentUser.name,
+        'userId': currentUser.id,
+        'userProfileImg': currentUser.photoUrl,
+        'postId': postId,
+        'timestamp': timeStamp,
+        'mediaUrl': postMediaUrl
+      });
+    }
     _commentController.clear();
   }
 }

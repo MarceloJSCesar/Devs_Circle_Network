@@ -24,6 +24,7 @@ final Reference storageRef = FirebaseStorage.instance.ref();
 final userRef = FirebaseFirestore.instance.collection('users');
 final postsRef = FirebaseFirestore.instance.collection('usersPosts');
 final commentRef = FirebaseFirestore.instance.collection('comments');
+final actividyFeedRef = FirebaseFirestore.instance.collection('feed');
 
 // a date time called timeStamp that will be helpful to organize our user data
 final Timestamp timeStamp = Timestamp.now();
