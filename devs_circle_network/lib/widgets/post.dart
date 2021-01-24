@@ -261,14 +261,45 @@ class _PostState extends State<Post> {
     );
   }
 
+  // this function to notice user when other user comment , this function will avoid own user getting their own comment notification
+  addLikeFromActividyFeed() {
+    bool isNotPostOwner = currentUserId != ownerId;
+    if (isNotPostOwner) {
+      actividyFeedRef.doc(ownerId).collection('feedItems').doc(postId).set({
+        'type': 'like',
+        'username': currentUser.name,
+        'userId': currentUser.id,
+        'userProfileImg': currentUser.photoUrl,
+        'postId': postId,
+        'timestamp': timeStamp,
+        'mediaUrl': mediaUrl
+      });
+    }
+  }
+
+  removeLikeFromActividyFeed() {
+    bool isNotPostOwner = currentUserId != ownerId;
+    if (isNotPostOwner) {
+      actividyFeedRef
+          .doc(ownerId)
+          .collection('feedItems')
+          .doc(postId)
+          .get()
+          .then((doc) {
+        if (doc.exists) {
+          doc.reference.delete();
+        }
+      });
+    }
+  }
+
   // our comments function that will be forward to comment page
   showComments(context, {String postId, String ownerId, String mediaUrl}) {
-    return Navigator.push(context, MaterialPageRoute(
-      builder: (_) => Comments(
-        postId: postId,
-        postOwnerId: ownerId,
-        postMediaUrl: mediaUrl
-      ),
-    ));
+    return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => Comments(
+              postId: postId, postOwnerId: ownerId, postMediaUrl: mediaUrl),
+        ));
   }
 }
