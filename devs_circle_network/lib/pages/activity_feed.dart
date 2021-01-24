@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/pages/home.dart';
+import 'package:social_media/pages/post_screen.dart';
 import 'package:social_media/widgets/header.dart';
 import 'package:social_media/widgets/progress.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -91,10 +92,10 @@ class ActivityFeedItem extends StatelessWidget {
     );
   }
 
-  configureMediaPreview() {
+  configureMediaPreview(context) {
     if (type == 'type' || type == 'comment') {
       mediaPreview = GestureDetector(
-        onTap: () => print('media preview tapped'),
+        onTap: () => showPost(context),
         child: Container(
           height: 50.0,
           width: 50.0,
@@ -126,14 +127,14 @@ class ActivityFeedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    configureMediaPreview();
+    configureMediaPreview(context);
     return Padding(
       padding: EdgeInsets.only(bottom: 2.0),
       child: Container(
         color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
-            onTap: () => print('show comment'),
+            onTap: () => print('show comments'),
             child: RichText(
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
@@ -158,5 +159,12 @@ class ActivityFeedItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // function to show other photo page , the photo where they clicked
+  showPost(context) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => PostScreen(postId: postId, userId: userId,),
+    ));
   }
 }

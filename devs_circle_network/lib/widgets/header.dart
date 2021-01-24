@@ -20,6 +20,8 @@ AppBar header(
         fontSize: isHomeTitle ? 35.0 : 25.0,
         fontFamily: 'Signatra',
       ),
+      // text will desapier when transbord (rolar para baixo, ta da pa intendi, haha)
+      overflow: TextOverflow.ellipsis,
     ),
     leading: removeLeading
         ? Text('')
