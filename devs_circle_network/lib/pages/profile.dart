@@ -1,17 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:social_media/models/user.dart';
 import 'package:social_media/pages/edit_profile.dart';
 import 'package:social_media/pages/home.dart';
 import 'package:social_media/widgets/post.dart';
 import 'package:social_media/widgets/post_tile.dart';
 import 'package:social_media/widgets/progress.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:social_media/models/user.dart';
-import 'package:social_media/widgets/header.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile extends StatefulWidget {
-  // requesting a user id
+  // requesting a user id and asking if want to able navigator pop or not because if other user want to see your profile , problably they want to leave there
   final String profileId;
   Profile({this.profileId});
   @override
@@ -19,6 +18,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  // a bool to know if user isfollowing another user or not
+  bool isFollowing = false;
+
   // a variable to handle with currentUser data
   final String currentUserId = currentUser?.id;
 
@@ -26,10 +28,18 @@ class _ProfileState extends State<Profile> {
   String _posOrientation = 'grid';
 
   bool isLoading = false;
+
   // number of userPost
   int postCount = 0;
+
+  // variables to saved numbers of followers and following
+  int followersCount = 0;
+  int followingCount = 0;
+
   // list where all the photos will be saved
   List<Post> posts = [];
+
+  bool forwardToProfilePage = false;
 
   getProfilePosts() async {
     setState(() {
@@ -52,18 +62,53 @@ class _ProfileState extends State<Profile> {
   void initState() {
     super.initState();
     getProfilePosts();
+    getFollowers();
+    getFollowing();
+    checkIfFollowing();
+  }
+
+  // checking if is following
+  checkIfFollowing() async {
+    DocumentSnapshot doc = await followersRef
+        .doc(widget.profileId)
+        .collection('followers')
+        .doc(currentUserId)
+        .get();
+    // checking if is following by seeing with that user exists or not
+    setState(() {
+      isFollowing = doc.exists;
+    });
+  }
+
+  getFollowers() async {
+    QuerySnapshot snapshot =
+        await followersRef.doc(widget.profileId).collection('followers').get();
+    setState(() {
+      followersCount = snapshot.docs.length;
+    });
+  }
+
+  getFollowing() async{
+    QuerySnapshot snapshot =
+      await followingRef.doc(widget.profileId).collection('following').get();
+    setState(() {
+      followingCount = snapshot.docs.length;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         // this header function it's a side part i created , inside widgets folder
-        appBar: header(
-          context,
-            isHomeTitle: false,
-            removeLeading: true,
-            titleText: 'Profile',
-            background: Colors.white),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Profile',
+            style: TextStyle(color: Colors.black, fontSize: 17),
+          ),
+          centerTitle: true,
+          elevation: 0,
+        ),
         body: ListView(
           children: <Widget>[
             buildProfileHeader(),
@@ -137,8 +182,10 @@ class _ProfileState extends State<Profile> {
               height: 20,
             ),
             Text('No Post Yet',
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 20)
-            ),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20)),
           ],
         ),
       );
@@ -182,14 +229,15 @@ class _ProfileState extends State<Profile> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               buildCountColumn('Posts', postCount),
-                              buildCountColumn('Followers', 0),
-                              buildCountColumn('Following', 0),
+                              buildCountColumn('Followers', followersCount),
+                              buildCountColumn('Following', followingCount),
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              buildButton(),
+                              buildProfileButton()
+                              //buildButton(),
                             ],
                           ),
                         ],
@@ -250,8 +298,87 @@ class _ProfileState extends State<Profile> {
     // viewing your profile -> should see button edit profile , checking if is your profile or not
     bool isMyProfile = currentUserId == widget.profileId;
     if (isMyProfile) {
-      return editProfile();
+      return buildButton(text: 'Edit Profile', function: editProfile);
+    } else if (!isMyProfile) {
+      if (isFollowing) {
+        return buildButton(text: 'Unfollow', function: handleUnfollowUser);
+      } else if (!isFollowing) {
+        return buildButton(text: 'Follow', function: handleFollowUser);
+      }
     }
+  }
+
+  handleUnfollowUser() {
+    setState(() {
+      isFollowing = false;
+    });
+    // remove follower
+    followersRef
+        .doc(widget.profileId)
+        .collection('followers')
+        .doc(currentUserId)
+        .get()
+        .then((doc) {
+      // deleting data only if exists
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // remove following
+    followingRef
+        .doc(currentUserId)
+        .collection('following')
+        .doc(widget.profileId)
+        .get()
+        .then((doc) {
+      // deleting data only if exists
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // delete actividy fee dfor them
+    actividyFeedRef
+        .doc(widget.profileId)
+        .collection('feedItems')
+        .doc(currentUserId)
+        .get()
+        .then((doc) {
+      // deleting data only if exists
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+  }
+
+  handleFollowUser() {
+    setState(() {
+      isFollowing = true;
+    });
+    // make auth user follower of that user and update their followers colletions
+    followersRef
+        .doc(widget.profileId)
+        .collection('followers')
+        .doc(currentUserId)
+        .set({});
+    // put that user on your following collection (at same time updating when foollowing)
+    followingRef
+        .doc(currentUserId)
+        .collection('following')
+        .doc(widget.profileId)
+        .set({});
+    // add activity feed on that user to notify about new follower
+    actividyFeedRef
+        .doc(widget.profileId)
+        .collection('feedItems')
+        .doc(currentUserId)
+        .set({
+      'type': 'follow',
+      'ownerId': widget.profileId,
+      'username': currentUser.name,
+      'userId': currentUserId,
+      'userProfileImg': currentUser.photoUrl,
+      'timestamp': timeStamp
+    });
   }
 
   editProfile() {
@@ -265,19 +392,22 @@ class _ProfileState extends State<Profile> {
     return Container(
       padding: EdgeInsets.only(top: 2.0),
       child: FlatButton(
-        onPressed: buildProfileButton,
+        onPressed: function,
         child: Container(
           alignment: Alignment.center,
           width: 240.0,
           height: 28.0,
           child: Text(
-            'Edit Profile',
+            text,
             style: TextStyle(
-                fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+                fontSize: 16,
+                color: isFollowing ? Colors.black : Colors.white,
+                fontWeight: FontWeight.bold),
           ),
           decoration: BoxDecoration(
-              color: Colors.grey[300],
-              border: Border.all(color: Colors.black),
+              color: isFollowing ? Colors.grey[300] : Colors.blue,
+              border:
+                  Border.all(color: isFollowing ? Colors.black : Colors.blue),
               borderRadius: BorderRadius.circular(5.0)),
         ),
       ),

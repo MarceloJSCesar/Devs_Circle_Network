@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/pages/home.dart';
 import 'package:social_media/pages/post_screen.dart';
+import 'package:social_media/pages/profile.dart';
 import 'package:social_media/widgets/header.dart';
 import 'package:social_media/widgets/progress.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -134,7 +135,7 @@ class ActivityFeedItem extends StatelessWidget {
         color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
-            onTap: () => print('show comments'),
+            onTap: () => showProfile(context, profileId: userId),
             child: RichText(
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
@@ -163,8 +164,28 @@ class ActivityFeedItem extends StatelessWidget {
 
   // function to show other photo page , the photo where they clicked
   showPost(context) {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (_) => PostScreen(postId: postId, userId: userId,),
-    ));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PostScreen(
+            postId: postId,
+            userId: userId,
+          ),
+        ));
   }
+}
+
+// function to be able to see another user profile
+showProfile(BuildContext context, {String profileId}) {
+  Navigator.push(context, MaterialPageRoute(
+    builder: (_) => Scaffold( 
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, 
+          color: Colors.black),
+          onPressed: () => Navigator.pop(context),),),
+          body: Profile(profileId: profileId))
+  ));
 }

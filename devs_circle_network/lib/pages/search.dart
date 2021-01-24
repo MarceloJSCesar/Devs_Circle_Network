@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:social_media/models/user.dart';
+import 'package:social_media/pages/activity_feed.dart';
 import 'package:social_media/pages/home.dart';
 import 'package:social_media/widgets/progress.dart';
 
@@ -147,7 +148,7 @@ class UserResult extends StatelessWidget {
               title: Text(user.displayName),
               subtitle: Text(user.name),
             ),
-            onTap: () {},
+            onTap: () => showProfile(context, profileId: user.id),
           ),
           Divider(
             height: 2.0,
