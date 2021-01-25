@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +23,7 @@ class Upload extends StatefulWidget {
   _UploadState createState() => _UploadState();
 }
 
-class _UploadState extends State<Upload> {
+class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin<Upload> {
   // controllers to our textFields
   TextEditingController captionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
@@ -72,6 +73,17 @@ class _UploadState extends State<Upload> {
       'description': caption,
       'timestamp': timeStamp,
       'likes': {}
+    });
+    timelineRef.doc(widget.currentUser.id).collection('timelinePost').add({
+      'timestamp': timeStamp,
+      'postId': postId,
+      'mediaUrl': mediaUrl,
+      'location': location,
+      'description': caption,
+      'likes': {},
+      'username': widget.currentUser.name,
+      'postId': postId,
+      'ownerId': widget.currentUser.id,
     });
   }
 
@@ -144,8 +156,12 @@ class _UploadState extends State<Upload> {
         });
   }
 
+   // to save our upload user results
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return file == null ? uploadSplashScreen() : buildPostUpload();
   }
 

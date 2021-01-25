@@ -10,6 +10,7 @@ import 'package:social_media/pages/profile.dart';
 import 'package:social_media/pages/search.dart';
 import 'package:social_media/pages/timeline.dart';
 import 'package:social_media/pages/upload.dart';
+import 'package:social_media/widgets/user_login.dart';
 
 // a google sign in variable to can sign with google
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -27,7 +28,7 @@ final commentRef = FirebaseFirestore.instance.collection('comments');
 final actividyFeedRef = FirebaseFirestore.instance.collection('feed');
 final followersRef = FirebaseFirestore.instance.collection('followers');
 final followingRef = FirebaseFirestore.instance.collection('following');
-
+final timelineRef = FirebaseFirestore.instance.collection('timeline');
 
 // a date time called timeStamp that will be helpful to organize our user data
 final Timestamp timeStamp = Timestamp.now();
@@ -47,18 +48,16 @@ class _HomeState extends State<Home> {
   // setting the index of our page , where gonna start first
   int pageIndex = 0;
 
-  // a function to sign in with google
-  void login() async {
-    await googleSignIn.signIn().then((data) {
-      print('Signed In correctly');
-    });
-  }
-
   // a function to logout
   void logout() async {
     await googleSignIn.signOut().then((data) {
       print('Logout correctly');
     });
+  }
+
+  // a function to logout , without auth yet
+  void login() async{
+    await googleSignIn.signIn().then((data) => print('login with google: sucess'));
   }
 
   @override
@@ -81,9 +80,9 @@ class _HomeState extends State<Home> {
   }
 
   // return a function to avoid repeating twice
-  handleSignIn(GoogleSignInAccount account) {
+  handleSignIn(GoogleSignInAccount account) async{
     if (account != null) {
-      createUser();
+      await createUser();
       setState(() {
         _isAuth = true;
       });
@@ -149,53 +148,8 @@ class _HomeState extends State<Home> {
     return _isAuth ? _buildAuthScreen(context) : _buildUnAuthScreen(context);
   }
 
-  // a function that return a widget to return our body
-  Scaffold _buildAuthScreen(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        children: <Widget>[
-          RaisedButton(
-            onPressed: () {
-              googleSignIn.signOut();
-            },
-            child: Text('logout'),
-          ),
-          //TimeLine(),
-          ActivityFeed(),
-          Upload(
-            currentUser: currentUser,
-          ),
-          Search(),
-          // providing user id to profile page , ?-> it's to check if is no null , will avoid us lots of erros
-          Profile(profileId: currentUser?.id),
-        ],
-        controller: pageController,
-        onPageChanged: onPageChanged,
-        physics: NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        currentIndex: pageIndex,
-        onTap: onTap,
-        activeColor: Theme.of(context).primaryColor,
-        items: [
-          // the bottom naviagation is following the pageIndex as well
-          BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_active)),
-          BottomNavigationBarItem(
-              icon: Icon(
-            Icons.photo_camera,
-            size: 40.0,
-          )),
-          BottomNavigationBarItem(icon: Icon(Icons.search)),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
-        ],
-      ),
-    );
-  }
-
-  // a function that return a scaffold
-  Scaffold _buildUnAuthScreen(BuildContext context) {
-    return Scaffold(
+Scaffold _buildUnAuthScreen(BuildContext context){
+  return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
         alignment: Alignment.center,
@@ -249,6 +203,50 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+      ),
+    );
+}
+
+  // a function that return a widget to return our body
+  Scaffold _buildAuthScreen(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        children: <Widget>[
+          // RaisedButton(
+          //   onPressed: () {
+          //     googleSignIn.signOut();
+          //   },
+          //   child: Text('logout'),
+          // ),
+          Timeline(currentUser: currentUser),
+          ActivityFeed(),
+          Upload(
+            currentUser: currentUser,
+          ),
+          Search(),
+          // providing user id to profile page , ?-> it's to check if is no null , will avoid us lots of erros
+          Profile(profileId: currentUser?.id),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        currentIndex: pageIndex,
+        onTap: onTap,
+        activeColor: Theme.of(context).primaryColor,
+        items: [
+          // the bottom naviagation is following the pageIndex as well
+          BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications_active)),
+          BottomNavigationBarItem(
+              icon: Icon(
+            Icons.photo_camera,
+            size: 40.0,
+          )),
+          BottomNavigationBarItem(icon: Icon(Icons.search)),
+          BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
+        ],
       ),
     );
   }

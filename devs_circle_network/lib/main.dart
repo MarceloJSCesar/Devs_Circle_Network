@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:social_media/pages/slide_page.dart';
 import 'package:social_media/pages/home.dart';
-
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,12 +16,12 @@ class MyApp extends StatelessWidget {
       title: 'Social Media Exercise',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        primaryColor: Colors.purple, 
-        accentColor: Colors.teal),
-      home: Home(),
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
+          primaryColor: Colors.purple,
+          accentColor: Colors.teal),
+          home: googleSignIn.currentUser != null ? Home() : SlidePage(),
     );
   }
 }

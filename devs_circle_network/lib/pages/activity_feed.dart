@@ -27,11 +27,10 @@ class _ActivityFeedState extends State<ActivityFeed> {
           future: getActividyFeed(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
+              print('Builersnapshot: ${snapshot.data}');
               return circularProgress();
             }
-            return ListView(
-              children: snapshot.data,
-            );
+            return ListView(children: snapshot.data);
           },
         ),
       ),
@@ -49,6 +48,7 @@ class _ActivityFeedState extends State<ActivityFeed> {
     List<ActivityFeedItem> feedItems = [];
     snapshot.docs.forEach((doc) {
       feedItems.add(ActivityFeedItem.fromDocument(doc));
+      print('feedItems: ${feedItems.length}, Snapshot: ${doc.data()}');
     });
     return feedItems;
   }
@@ -95,20 +95,20 @@ class ActivityFeedItem extends StatelessWidget {
 
   configureMediaPreview(context) {
     if (type == 'type' || type == 'comment') {
-      mediaPreview = GestureDetector(
-        onTap: () => showPost(context),
-        child: Container(
+      mediaPreview = Container(
           height: 50.0,
-          width: 50.0,
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: CachedNetworkImageProvider(mediaUrl))),
+          width: 60.0,
+        child: GestureDetector(
+          onTap: () => showPost(context, postIde: postId, userIde: currentUser.id),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: CachedNetworkImageProvider(mediaUrl),)),
+              ),
             ),
-          ),
         ),
       );
     } else {
@@ -163,13 +163,13 @@ class ActivityFeedItem extends StatelessWidget {
   }
 
   // function to show other photo page , the photo where they clicked
-  showPost(context) {
+  showPost(context,{String postIde, userIde}) {
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => PostScreen(
-            postId: postId,
-            userId: userId,
+            postId: postIde,
+            userId: userIde,
           ),
         ));
   }
@@ -177,15 +177,17 @@ class ActivityFeedItem extends StatelessWidget {
 
 // function to be able to see another user profile
 showProfile(BuildContext context, {String profileId}) {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (_) => Scaffold( 
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, 
-          color: Colors.black),
-          onPressed: () => Navigator.pop(context),),),
-          body: Profile(profileId: profileId))
-  ));
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              body: Profile(profileId: profileId))));
 }

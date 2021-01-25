@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 // the model user to provide the data that will be saved in users firebase collections
 class User {
@@ -30,3 +31,4 @@ class User {
         displayName: doc['displayName']);
   }
 }
+

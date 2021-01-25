@@ -12,7 +12,8 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchState extends State<Search>
+    with AutomaticKeepAliveClientMixin<Search> {
   // a controller to my search input
   TextEditingController searchController = TextEditingController();
   // a query snapshot to get as variable where be storage our userdata
@@ -33,8 +34,12 @@ class _SearchState extends State<Search> {
     searchController.clear();
   }
 
+  // to save our search user results
+  get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight.withOpacity(0.8),
       appBar: buildAppBar(),

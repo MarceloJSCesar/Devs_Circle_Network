@@ -1,0 +1,129 @@
+class Timeline extends StatefulWidget {
+  final User currentUser;
+  Timeline({this.currentUser});
+  @override
+  _TimelineState createState() => _TimelineState();
+}
+
+class _TimelineState extends State<Timeline> {
+  List<Post> posts;
+  List<String> followingList;
+  @override
+  void initState() {
+    super.initState();
+    if (posts != null || followingList != null) {
+      getTimeLine();
+      getFollowing();
+    }
+    print('currentUser: ${widget.currentUser.id}');
+    print('posts: $posts');
+    print('followingList: $followingList');
+  }
+
+  @override
+  Widget build(context) {
+    return Scaffold(
+        // this header function it's a side part i created , inside widgets folder
+        appBar: header(context,
+            isHomeTitle: true, background: Colors.white, removeLeading: true),
+        body: RefreshIndicator(
+          onRefresh: () => getTimeLine(),
+          child: buildTimeLine(),
+        ));
+  }
+
+  getTimeLine() async {
+    QuerySnapshot snapshot = await timelineRef
+        .doc(widget.currentUser.id)
+        .collection('timelinePost')
+        .orderBy('timestamp', descending: true)
+        .get();
+    List<Post> posts =
+        snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+    setState(() {
+      this.posts = posts;
+    });
+  }
+
+  buildTimeLine() {
+    if (posts == null) {
+      return circularProgress();
+    } else if (posts.isEmpty) {
+      return buildUsersToFollow();
+    } else {
+      return ListView(
+        children: posts,
+      );
+    }
+  }
+
+  buildUsersToFollow() {
+    return StreamBuilder(
+      stream:
+          userRef.orderBy('timestamp', descending: true).limit(30).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return circularProgress();
+        }
+        List<UserResult> userResults = [];
+        snapshot.data.docs.forEach((doc) {
+          User user = User.fromDocument(doc);
+          bool isAuthUser = currentUser.id == user.id;
+          bool isFollowingUser = followingList.contains(user.id);
+          // remove auth user from recommend list
+          if (isAuthUser) {
+            return Text('its me');
+          } else if (isFollowingUser) {
+            return Text('its me following user');
+          } else {
+            UserResult userResult = UserResult(user);
+            userResults.add(userResult);
+          }
+        });
+        return Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.person_add,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 8.0,
+                    ),
+                    Text(
+                      'Users To Follow',
+                      style: TextStyle(color: Colors.red, fontSize: 30.0),
+                    ),
+                  ],
+                ),
+              ),
+              ListView(
+                children: posts != null
+                    ? userResults
+                    : <Widget>[
+                        Text(
+                          'No user registered yet',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  getFollowing() async {
+    QuerySnapshot snapshot =
+        await followingRef.doc(currentUser.id).collection('following').get();
+    setState(() {
+      followingList = snapshot.docs.map((doc) => doc.id).toList();
+    });
+  }
+}

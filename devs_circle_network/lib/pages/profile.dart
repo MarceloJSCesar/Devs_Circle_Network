@@ -104,7 +104,7 @@ class _ProfileState extends State<Profile> {
           backgroundColor: Colors.white,
           title: Text(
             'Profile',
-            style: TextStyle(color: Colors.black, fontSize: 17),
+            style: TextStyle(color: Colors.black, fontSize: 23, fontFamily: 'Signatra'),
           ),
           centerTitle: true,
           elevation: 0,
