@@ -32,40 +32,47 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: header(context,
-            isHomeTitle: true, removeLeading: true, background: Colors.white),
-        body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                   Container(
-                     margin: const EdgeInsets.fromLTRB(20,0,10,10),
-                     child: CircleAvatar(
-                          backgroundColor: Colors.red,
-                          backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
-                        ),
-                   ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(currentUser.name),
-                        Text(currentUser.bio, style: TextStyle(
-                          color: Colors.grey[700]
-                        ),),
-                      ],
-                    ),
-                    ]
-                ),
-                buildProfilePosts(),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+        appBar: header(
+          context, isHomeTitle: true,removeLeading: true, background: Colors.black, color: Colors.white
         ),
+        backgroundColor: Colors.black,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(0,50,0,0),
+            child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                       Container(
+                         margin: const EdgeInsets.fromLTRB(20,10,10,10),
+                         child: CircleAvatar(
+                              backgroundColor: Colors.red,
+                              backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
+                            ),
+                       ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(currentUser.name,style: TextStyle(
+                              color: Colors.grey[300]
+                            ),),
+                            Text(currentUser.bio, style: TextStyle(
+                              color: Colors.grey[300]
+                            ),),
+                          ],
+                        ),
+                        ]
+                    ),
+                    buildProfilePosts(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+          ),
+          ),
         );
   }
 
@@ -103,7 +110,7 @@ class _TimelineState extends State<Timeline> {
             ),
             Text('No Post Yet',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 20)),
           ],

@@ -7,6 +7,7 @@ AppBar header(
     bool isHomeTitle = false,
     removeLeading = false,
     Color background,
+    Color color,
     String titleText}) {
   return AppBar(
     automaticallyImplyLeading: removeLeading ? false : true,
@@ -16,7 +17,7 @@ AppBar header(
     title: Text(
       isHomeTitle ? 'Devs Circle' : titleText,
       style: TextStyle(
-        color: Colors.black,
+        color: color,
         fontSize: isHomeTitle ? 35.0 : 25.0,
         fontFamily: 'Signatra',
       ),

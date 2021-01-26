@@ -88,9 +88,9 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  getFollowing() async{
+  getFollowing() async {
     QuerySnapshot snapshot =
-      await followingRef.doc(widget.profileId).collection('following').get();
+        await followingRef.doc(widget.profileId).collection('following').get();
     setState(() {
       followingCount = snapshot.docs.length;
     });
@@ -99,27 +99,70 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // this header function it's a side part i created , inside widgets folder
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Profile',
-            style: TextStyle(color: Colors.black, fontSize: 23, fontFamily: 'Signatra'),
-          ),
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body: ListView(
-          children: <Widget>[
-            buildProfileHeader(),
-            Divider(),
-            buildTogglePostOrientation(),
-            Divider(
-              height: 0.0,
-            ),
-            buildProfilePosts(),
-          ],
-        ));
+        body: FutureBuilder(
+            future: userRef.doc(widget.profileId).get(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return circularProgress();
+              }
+              User user = User.fromDocument(snapshot.data);
+              return SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(10,0,10,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(top: 60),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            ClipOval(
+                                child: Image(
+                                  image: CachedNetworkImageProvider(user.photoUrl),
+                                ),
+                              ),
+                            buildCountColumn('Posts', postCount),
+                            buildCountColumn('Followers', followersCount),
+                            buildCountColumn('Following', followingCount),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                      user.name,
+                      style: TextStyle(fontSize: 16, ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                      user.email,
+                      style: TextStyle(fontSize: 16, ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                      user.bio,
+                      style: TextStyle(fontSize: 16,),
+                      ),
+                      buildProfileButton(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Divider(),
+                      buildTogglePostOrientation(),
+                      Divider(),
+                      buildProfilePosts()
+                    ],
+                  ),
+                ),
+              );
+            }));
   }
 
   buildTogglePostOrientation() {
@@ -158,8 +201,8 @@ class _ProfileState extends State<Profile> {
       });
       return GridView.count(
         crossAxisCount: 3,
-        crossAxisSpacing: 1.5,
-        mainAxisSpacing: 1.5,
+        crossAxisSpacing: 0.5,
+        mainAxisSpacing: 0.5,
         childAspectRatio: 1.0,
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
@@ -207,71 +250,8 @@ class _ProfileState extends State<Profile> {
           if (!snapshot.hasData) {
             return circularProgress();
           }
-          User user = User.fromDocument(snapshot.data);
-          return Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 40.0,
-                      backgroundColor: Colors.grey,
-                      backgroundImage:
-                          CachedNetworkImageProvider(user.photoUrl),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              buildCountColumn('Posts', postCount),
-                              buildCountColumn('Followers', followersCount),
-                              buildCountColumn('Following', followingCount),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              buildProfileButton()
-                              //buildButton(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    user.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 4.0),
-                  child: Text(
-                    user.displayName,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    user.bio,
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                ),
-              ],
-            ),
-          );
+          // User user = User.fromDocument(snapshot.data);
+          return null;
         });
   }
 
@@ -285,10 +265,13 @@ class _ProfileState extends State<Profile> {
           style: TextStyle(
               color: Colors.black, fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
+        SizedBox(
+          height: 5
+        ),
         Text(
           label,
           style: TextStyle(
-              color: Colors.grey, fontSize: 15.0, fontWeight: FontWeight.bold),
+              color: Colors.grey[350], fontSize: 15.0, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -395,7 +378,7 @@ class _ProfileState extends State<Profile> {
         onPressed: function,
         child: Container(
           alignment: Alignment.center,
-          width: 240.0,
+          width: 250.0,
           height: 28.0,
           child: Text(
             text,
@@ -414,3 +397,80 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+// Padding(
+//             padding: EdgeInsets.all(16.0),
+//             child: Column(
+//               children: <Widget>[
+//                 Row(
+//                   children: <Widget>[
+//                     CircleAvatar(
+//                       radius: 40.0,
+//                       backgroundColor: Colors.grey,
+//                       backgroundImage:
+//                           CachedNetworkImageProvider(user.photoUrl),
+//                     ),
+//                     Expanded(
+//                       flex: 1,
+//                       child: Column(
+//                         children: <Widget>[
+//                           Row(
+//                             mainAxisSize: MainAxisSize.max,
+//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                             children: <Widget>[
+//                               buildCountColumn('Posts', postCount),
+//                               buildCountColumn('Followers', followersCount),
+//                               buildCountColumn('Following', followingCount),
+//                             ],
+//                           ),
+//                           Row(
+//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                             children: <Widget>[
+//                               buildProfileButton()
+//                               //buildButton(),
+//                             ],
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 Container(
+//                   alignment: Alignment.centerLeft,
+//                   padding: EdgeInsets.only(top: 12.0),
+//                   child: Text(
+//                     user.name,
+//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                   ),
+//                 ),
+//                 Container(
+//                   alignment: Alignment.centerLeft,
+//                   padding: EdgeInsets.only(top: 4.0),
+//                   child: Text(
+//                     user.displayName,
+//                     style: TextStyle(fontWeight: FontWeight.bold),
+//                   ),
+//                 ),
+//                 Container(
+//                   alignment: Alignment.centerLeft,
+//                   padding: EdgeInsets.only(top: 10.0),
+//                   child: Text(
+//                     user.bio,
+//                     style: TextStyle(color: Colors.grey[700]),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           );
+
+// ListView(
+//             children: <Widget>[
+//               buildProfileHeader(),
+//               Divider(),
+//               buildTogglePostOrientation(),
+//               Divider(
+//                 height: 0.0,
+//               ),
+//               buildProfilePosts(),
+//             ],
+//           ),

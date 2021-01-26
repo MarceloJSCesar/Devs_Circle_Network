@@ -20,8 +20,10 @@ class _ActivityFeedState extends State<ActivityFeed> {
       appBar: header(context,
           isHomeTitle: false,
           titleText: 'Actividy Feed',
-          background: Colors.white,
+          background: Colors.black,
+          color: Colors.white,
           removeLeading: true),
+          backgroundColor: Colors.black,
       body: Container(
         child: FutureBuilder(
           future: getActividyFeed(),

@@ -161,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
         Padding(
           padding: EdgeInsets.only(top: 12.0),
           child: Text(
-            'Display Name',
+            'Nick Name',
             style: TextStyle(color: Colors.grey),
           ),
         ),
