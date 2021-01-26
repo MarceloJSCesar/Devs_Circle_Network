@@ -122,13 +122,21 @@ class _PostState extends State<Post> {
             child: Text(
               user.name,
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          subtitle: Text(location),
+          subtitle: Text(
+            location,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           trailing: isPostOwner
               ? IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   onPressed: () => handleDeletePost(context),
                 )
               : Text(''),
@@ -187,7 +195,15 @@ class _PostState extends State<Post> {
         doc.reference.delete();
       }
     });
-    // 4) delete all comments
+    // 4) delete from allusersPosts collection
+    QuerySnapshot allusersPostSnapshot =
+        await allusersPostsRef.doc('idAllPost1').collection('usersPosts').get();
+    allusersPostSnapshot.docs.forEach((doc) {
+      if (doc.exists) {
+        doc.reference.delete();
+      }
+    });
+    // 5) delete all comments
     QuerySnapshot commentSnapshot =
         await commentRef.doc(postId).collection('comments').get();
     commentSnapshot.docs.forEach((doc) {
@@ -233,6 +249,9 @@ class _PostState extends State<Post> {
           .collection('userPosts')
           .doc(postId)
           .update({'likes.$currentUserId': false});
+      allusersPostsRef
+          .doc('usersposts')
+          .update({'likes.$currentUserId': false});
       setState(() {
         likesCount -= 1;
         isLiked = false;
@@ -244,6 +263,7 @@ class _PostState extends State<Post> {
           .collection('userPosts')
           .doc(postId)
           .update({'likes.$currentUserId': true});
+      allusersPostsRef.doc('usersposts').update({'likes.$currentUserId': true});
       setState(() {
         likesCount += 1;
         isLiked = true;
@@ -299,7 +319,7 @@ class _PostState extends State<Post> {
                 child: Text(
                   '$likesCount likes',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -313,11 +333,13 @@ class _PostState extends State<Post> {
                 child: Text(
                   '$username',
                   style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(width: 5.0),
-              Text(description),
+              Text(description,
+                  style: (TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold))),
             ],
           ),
         ],

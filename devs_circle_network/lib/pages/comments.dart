@@ -38,7 +38,8 @@ class CommentsState extends State<Comments> {
           isHomeTitle: false,
           titleText: 'Comments',
           removeLeading: false,
-          background: Colors.white),
+          background: Colors.black),
+        backgroundColor: Colors.black,
       body: Container(
         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
@@ -48,8 +49,8 @@ class CommentsState extends State<Comments> {
             Container(
               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10)),
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15)),
               child: Form(
                 key: _commentKey,
                 child: ListTile(
@@ -61,8 +62,12 @@ class CommentsState extends State<Comments> {
                       }
                       return null;
                     },
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                         hintText: 'Write a comment ...',
+                        hintStyle: TextStyle(
+                      color: Colors.white
+                        ),
                         border: InputBorder.none),
                   ),
                   trailing: OutlineButton(
@@ -72,7 +77,9 @@ class CommentsState extends State<Comments> {
                       }
                     },
                     borderSide: BorderSide.none,
-                    child: Text('Post'),
+                    child: Text('Post', style: TextStyle(
+                      color: Colors.white
+                    ),),
                   ),
                 ),
               ),
@@ -163,11 +170,15 @@ class Comment extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          title: Text(comment),
+          title: Text(comment, style: TextStyle(
+            color: Colors.white
+          ),),
           leading: CircleAvatar(
             backgroundImage: CachedNetworkImageProvider(avatarUrl),
           ),
-          subtitle: Text(timeago.format(timestamp.toDate())),
+          subtitle: Text(timeago.format(timestamp.toDate()),style: TextStyle(
+                      color: Colors.white
+                    ),),
         ),
         Divider(),
       ],

@@ -82,11 +82,11 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       key: _scaffoldkey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         centerTitle: true,
         title: Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.black, fontSize: 17),
+          style: TextStyle(color: Colors.white, fontSize: 17),
         ),
         actions: [
           IconButton(
@@ -100,11 +100,12 @@ class _EditProfileState extends State<EditProfile> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor:  Colors.black,
       body: isLoading
           ? circularProgress()
           : ListView(
@@ -161,15 +162,21 @@ class _EditProfileState extends State<EditProfile> {
         Padding(
           padding: EdgeInsets.only(top: 12.0),
           child: Text(
-            'Nick Name',
+            'Nick  Name',
             style: TextStyle(color: Colors.grey),
           ),
         ),
         TextField(
           maxLength: 20,
           controller: nameController,
+           style: TextStyle(
+            color: Colors.white,
+          ),
           decoration: InputDecoration(
               hintText: 'Update Display Name',
+              hintStyle: TextStyle(
+                color:  Colors.white,
+              ),
               errorText: nameVal ? null : 'Invalid name'),
         ),
       ],
@@ -189,9 +196,16 @@ class _EditProfileState extends State<EditProfile> {
         ),
         TextField(
           maxLength: 100,
+          style: TextStyle(
+            color: Colors.white,
+          ),
           controller: bioController,
           decoration: InputDecoration(
-              hintText: 'Update Bio', errorText: bioVal ? null : 'Invalid bio'),
+              hintText: 'Update Bio', 
+              hintStyle: TextStyle(
+                color:  Colors.white,
+              ),
+              errorText: bioVal ? null : 'Invalid bio'),
         ),
       ],
     );

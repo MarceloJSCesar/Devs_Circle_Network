@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/pages/activity_feed.dart';
 import 'package:social_media/pages/create_account.dart';
+import 'package:social_media/pages/news_page.dart';
 import 'package:social_media/pages/profile.dart';
 import 'package:social_media/pages/search.dart';
 import 'package:social_media/pages/timeline.dart';
@@ -29,6 +30,7 @@ final actividyFeedRef = FirebaseFirestore.instance.collection('feed');
 final followersRef = FirebaseFirestore.instance.collection('followers');
 final followingRef = FirebaseFirestore.instance.collection('following');
 final timelineRef = FirebaseFirestore.instance.collection('timeline');
+final allusersPostsRef = FirebaseFirestore.instance.collection('allusersPosts');
 
 // a date time called timeStamp that will be helpful to organize our user data
 final Timestamp timeStamp = Timestamp.now();
@@ -56,8 +58,10 @@ class _HomeState extends State<Home> {
   }
 
   // a function to logout , without auth yet
-  void login() async{
-    await googleSignIn.signIn().then((data) => print('login with google: sucess'));
+  void login() async {
+    await googleSignIn
+        .signIn()
+        .then((data) => print('login with google: sucess'));
   }
 
   @override
@@ -80,7 +84,7 @@ class _HomeState extends State<Home> {
   }
 
   // return a function to avoid repeating twice
-  handleSignIn(GoogleSignInAccount account) async{
+  handleSignIn(GoogleSignInAccount account) async {
     if (account != null) {
       await createUser();
       setState(() {
@@ -148,8 +152,8 @@ class _HomeState extends State<Home> {
     return _isAuth ? _buildAuthScreen(context) : _buildUnAuthScreen(context);
   }
 
-Scaffold _buildUnAuthScreen(BuildContext context){
-  return Scaffold(
+  Scaffold _buildUnAuthScreen(BuildContext context) {
+    return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
         alignment: Alignment.center,
@@ -205,7 +209,7 @@ Scaffold _buildUnAuthScreen(BuildContext context){
         ),
       ),
     );
-}
+  }
 
   // a function that return a widget to return our body
   Scaffold _buildAuthScreen(BuildContext context) {
@@ -219,11 +223,12 @@ Scaffold _buildUnAuthScreen(BuildContext context){
           //   child: Text('logout'),
           // ),
           Timeline(currentUser: currentUser),
-          ActivityFeed(),
+          NewsPage(),
+          Search(),
           Upload(
             currentUser: currentUser,
           ),
-          Search(),
+          ActivityFeed(),
           // providing user id to profile page , ?-> it's to check if is no null , will avoid us lots of erros
           Profile(profileId: currentUser?.id),
         ],
@@ -234,17 +239,18 @@ Scaffold _buildUnAuthScreen(BuildContext context){
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: pageIndex,
         onTap: onTap,
-        activeColor: Theme.of(context).primaryColor,
+        backgroundColor: Colors.black,
+        activeColor: Colors.white,
         items: [
           // the bottom naviagation is following the pageIndex as well
+          BottomNavigationBarItem(icon: Icon(Icons.home)),
           BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_active)),
+          BottomNavigationBarItem(icon: Icon(Icons.search)),
           BottomNavigationBarItem(
               icon: Icon(
             Icons.photo_camera,
-            size: 40.0,
           )),
-          BottomNavigationBarItem(icon: Icon(Icons.search)),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications_active)),
           BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
         ],
       ),

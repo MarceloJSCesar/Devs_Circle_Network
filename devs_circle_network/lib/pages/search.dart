@@ -41,7 +41,7 @@ class _SearchState extends State<Search>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight.withOpacity(0.8),
+      backgroundColor: Colors.black,
       appBar: buildAppBar(),
       body: searchResultFuture == null
           ? buildNoContentBody()
@@ -53,25 +53,29 @@ class _SearchState extends State<Search>
   AppBar buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Colors.black,
       title: TextFormField(
         controller: searchController,
         onFieldSubmitted: handleSearch,
+        style: TextStyle(color: Colors.white),
         //onFieldSubmitted: ,
         decoration: InputDecoration(
           filled: true,
           hintText: 'Search for user ...',
+          hintStyle: TextStyle(
+            color: Colors.white
+          ),
           border: InputBorder.none,
           prefixIcon: Icon(
             Icons.account_box,
             size: 25.0,
-            color: Theme.of(context).iconTheme.color,
+            color: Colors.white,
           ),
           suffixIcon: IconButton(
             icon: Icon(
               Icons.clear,
               size: 18,
-              color: Theme.of(context).iconTheme.color,
+              color: Colors.white,
             ),
             onPressed: clear,
           ),
@@ -150,10 +154,13 @@ class UserResult extends StatelessWidget {
                 // the reason to use this widgets to provide image it's because will save in cache and optimize our state ...
                 backgroundImage: CachedNetworkImageProvider(user.photoUrl),
               ),
-              title: Text(user.displayName),
-              subtitle: Text(user.name),
+              title: Text(user.displayName, style: TextStyle(
+                color: Colors.white)
+              ),
+              subtitle: Text(user.name, style: TextStyle(
+                color: Colors.white),
             ),
-            onTap: () => showProfile(context, profileId: user.id),
+            onTap: () => showProfile(context, profileId: user.id)),
           ),
           Divider(
             height: 2.0,

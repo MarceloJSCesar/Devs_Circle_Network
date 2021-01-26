@@ -134,7 +134,6 @@ class ActivityFeedItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 2.0),
       child: Container(
-        color: Colors.white54,
         child: ListTile(
           title: GestureDetector(
             onTap: () => showProfile(context, profileId: userId),
@@ -145,9 +144,9 @@ class ActivityFeedItem extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: username,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                   ),
-                  TextSpan(text: ' $actividyItemText'),
+                  TextSpan(text: ' $actividyItemText',style: TextStyle(color: Colors.white),),
                 ],
               ),
             ),
@@ -155,7 +154,7 @@ class ActivityFeedItem extends StatelessWidget {
           leading: CircleAvatar(
               backgroundImage: CachedNetworkImageProvider(userProfileImg)),
           subtitle: Text(
-            timeago.format(timestamp.toDate()),
+            timeago.format(timestamp.toDate()), style: TextStyle(color: Colors.white),
             overflow: TextOverflow.ellipsis,
           ),
           trailing: mediaPreview,
@@ -184,10 +183,10 @@ showProfile(BuildContext context, {String profileId}) {
       MaterialPageRoute(
           builder: (_) => Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.black,
                 elevation: 0,
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),

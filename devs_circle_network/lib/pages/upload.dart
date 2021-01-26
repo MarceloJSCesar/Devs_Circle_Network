@@ -23,7 +23,8 @@ class Upload extends StatefulWidget {
   _UploadState createState() => _UploadState();
 }
 
-class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin<Upload> {
+class _UploadState extends State<Upload>
+    with AutomaticKeepAliveClientMixin<Upload> {
   // controllers to our textFields
   TextEditingController captionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
@@ -74,16 +75,15 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin<Uplo
       'timestamp': timeStamp,
       'likes': {}
     });
-    timelineRef.doc(widget.currentUser.id).collection('timelinePost').add({
-      'timestamp': timeStamp,
+    allusersPostsRef.doc('idAllPost1').collection('usersPosts').doc('idAllPost2').set({
       'postId': postId,
+      'ownerId': widget.currentUser.id,
+      'username': widget.currentUser.name,
       'mediaUrl': mediaUrl,
       'location': location,
       'description': caption,
-      'likes': {},
-      'username': widget.currentUser.name,
-      'postId': postId,
-      'ownerId': widget.currentUser.id,
+      'timestamp': timeStamp,
+      'likes': {}
     });
   }
 
@@ -156,7 +156,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin<Uplo
         });
   }
 
-   // to save our upload user results
+  // to save our upload user results
   bool get wantKeepAlive => true;
 
   @override
@@ -304,7 +304,7 @@ class _UploadState extends State<Upload> with AutomaticKeepAliveClientMixin<Uplo
 // building uploadScreen
   Container uploadSplashScreen() {
     return Container(
-      color: Theme.of(context).primaryColorLight.withOpacity(0.8),
+      color: Colors.black,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

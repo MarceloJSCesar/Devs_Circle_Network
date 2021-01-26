@@ -99,6 +99,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
         body: FutureBuilder(
             future: userRef.doc(widget.profileId).get(),
             builder: (context, snapshot) {
@@ -134,22 +135,23 @@ class _ProfileState extends State<Profile> {
                       ),
                       Text(
                       user.name,
-                      style: TextStyle(fontSize: 16, ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                       user.email,
-                      style: TextStyle(fontSize: 16, ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
                       user.bio,
-                      style: TextStyle(fontSize: 16,),
+                      style: TextStyle(fontSize: 16,color: Colors.grey),
                       ),
+                      SizedBox(height: 10.0,),
                       buildProfileButton(),
                       SizedBox(
                         height: 20,
@@ -263,7 +265,7 @@ class _ProfileState extends State<Profile> {
         Text(
           count.toString(),
           style: TextStyle(
-              color: Colors.black, fontSize: 22.0, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 5
@@ -398,79 +400,3 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-// Padding(
-//             padding: EdgeInsets.all(16.0),
-//             child: Column(
-//               children: <Widget>[
-//                 Row(
-//                   children: <Widget>[
-//                     CircleAvatar(
-//                       radius: 40.0,
-//                       backgroundColor: Colors.grey,
-//                       backgroundImage:
-//                           CachedNetworkImageProvider(user.photoUrl),
-//                     ),
-//                     Expanded(
-//                       flex: 1,
-//                       child: Column(
-//                         children: <Widget>[
-//                           Row(
-//                             mainAxisSize: MainAxisSize.max,
-//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                             children: <Widget>[
-//                               buildCountColumn('Posts', postCount),
-//                               buildCountColumn('Followers', followersCount),
-//                               buildCountColumn('Following', followingCount),
-//                             ],
-//                           ),
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                             children: <Widget>[
-//                               buildProfileButton()
-//                               //buildButton(),
-//                             ],
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//                 Container(
-//                   alignment: Alignment.centerLeft,
-//                   padding: EdgeInsets.only(top: 12.0),
-//                   child: Text(
-//                     user.name,
-//                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                   ),
-//                 ),
-//                 Container(
-//                   alignment: Alignment.centerLeft,
-//                   padding: EdgeInsets.only(top: 4.0),
-//                   child: Text(
-//                     user.displayName,
-//                     style: TextStyle(fontWeight: FontWeight.bold),
-//                   ),
-//                 ),
-//                 Container(
-//                   alignment: Alignment.centerLeft,
-//                   padding: EdgeInsets.only(top: 10.0),
-//                   child: Text(
-//                     user.bio,
-//                     style: TextStyle(color: Colors.grey[700]),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-
-// ListView(
-//             children: <Widget>[
-//               buildProfileHeader(),
-//               Divider(),
-//               buildTogglePostOrientation(),
-//               Divider(
-//                 height: 0.0,
-//               ),
-//               buildProfilePosts(),
-//             ],
-//           ),

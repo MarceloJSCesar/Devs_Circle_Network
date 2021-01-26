@@ -6,8 +6,6 @@ import 'package:social_media/widgets/post_tile.dart';
 import 'package:social_media/widgets/progress.dart';
 import 'package:social_media/widgets/post.dart';
 import 'package:social_media/pages/home.dart';
-import 'package:social_media/pages/search.dart';
-import 'package:social_media/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Timeline extends StatefulWidget {
@@ -18,118 +16,89 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
-  bool isLoading = false;
-  // number of userPost
-  int postCount = 0;
-  // list where all the photos will be saved
-  List<Post> posts = [];
   @override
-  void initState() {
-    getProfilePosts();
-    super.initState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: header(context,
+          isHomeTitle: true,
+          removeLeading: true,
+          background: Colors.black,
+          color: Colors.white),
+      backgroundColor: Colors.black,
+      body: FutureBuilder(
+        future: getPhotosItems(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+                child: Text(
+              'No posts yet',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ));
+          }
+          return Container();
+        },
+      ),
+    );
+  }
+}
+
+// function to get data from users actions , will return a future
+getPhotosItems() async {
+  QuerySnapshot snapshot = await actividyFeedRef
+      .doc('idAllPost1')
+      .collection('userPosts')
+      .orderBy('timestamp', descending: true)
+      .limit(50)
+      .get();
+  List<PhotosItems> photosItems = [];
+  snapshot.docs.forEach((doc) {
+    photosItems.add(PhotosItems.fromDocument(doc));
+    print('photosItem: ${photosItems.length}, Snapshot: ${doc.data()}');
+  });
+  return photosItems;
+}
+
+class PhotosItems extends StatelessWidget {
+  final String postId;
+  final String userId;
+  final String description;
+  final String mediaUrl;
+  final String username;
+  final String userProfileImg;
+  final Timestamp timestamp;
+  final Map likes;
+
+  PhotosItems({
+    this.likes,
+    this.postId,
+    this.userId,
+    this.description, // likes, follower, comment
+    this.mediaUrl,
+    this.username,
+    this.userProfileImg,
+    this.timestamp,
+  });
+
+  factory PhotosItems.fromDocument(DocumentSnapshot doc) {
+    return PhotosItems(
+      likes: doc['likes'],
+      postId: doc['postId'],
+      userId: doc['userId'],
+      description: doc['type'],
+      mediaUrl: doc['description'],
+      username: doc['username'],
+      userProfileImg: doc['userProfileImg'],
+      timestamp: doc['timestamp'],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: header(
-          context, isHomeTitle: true,removeLeading: true, background: Colors.black, color: Colors.white
-        ),
-        backgroundColor: Colors.black,
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(0,50,0,0),
-            child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                       Container(
-                         margin: const EdgeInsets.fromLTRB(20,10,10,10),
-                         child: CircleAvatar(
-                              backgroundColor: Colors.red,
-                              backgroundImage: CachedNetworkImageProvider(currentUser.photoUrl),
-                            ),
-                       ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(currentUser.name,style: TextStyle(
-                              color: Colors.grey[300]
-                            ),),
-                            Text(currentUser.bio, style: TextStyle(
-                              color: Colors.grey[300]
-                            ),),
-                          ],
-                        ),
-                        ]
-                    ),
-                    buildProfilePosts(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-          ),
-          ),
-        );
-  }
-
-  getProfilePosts() async {
-    setState(() {
-      isLoading = true;
-    });
-    QuerySnapshot snapshot = await postsRef
-        .doc(widget.currentUser?.id)
-        .collection('userPosts')
-        .orderBy('timestamp', descending: true)
-        .get();
-    setState(() {
-      isLoading = false;
-      postCount = snapshot.docs.length;
-      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
-      print(posts.length);
-    });
-  }
-
-  buildProfilePosts() {
-    if (isLoading) {
-      return circularProgress();
-    } else if (posts.isEmpty) {
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              'assets/images/no_content.svg',
-              height: 260.0,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text('No Post Yet',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20)),
-          ],
-        ),
-      );
-    } else {
-      List<GridTile> gridTiles = [];
-      posts.forEach((post) {
-        gridTiles.add(GridTile(child: PostTile(post)));
-      });
-      return GridView.count(
-        crossAxisCount: 1,
-        crossAxisSpacing: 1.5,
-        mainAxisSpacing: 1.5,
-        childAspectRatio: 1.0,
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        children: gridTiles,
-      );
-    }
+    return Container(
+      child: Text(
+        username,
+        style: TextStyle(color: Colors.red),
+      ),
+    );
   }
 }
