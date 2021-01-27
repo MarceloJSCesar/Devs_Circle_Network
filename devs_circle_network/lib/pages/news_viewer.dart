@@ -58,16 +58,14 @@ class ViewerNews extends StatelessWidget {
                 )
               ]),
         ),
-        SizedBox(
-          height: 20,
-        ),
+        SizedBox(height: 20,),
         RichText(
           text: TextSpan(
-              text: 'Content:   ',
+              text: 'Description:   ',
               style: TextStyle(color: Colors.white, fontSize: 17),
               children: [
                 TextSpan(
-                  text: data['content'],
+                  text: data['description'],
                   style: TextStyle(color: Colors.grey[300], fontSize: 15),
                 )
               ]),

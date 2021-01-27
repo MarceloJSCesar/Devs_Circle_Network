@@ -1,10 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:social_media/widgets/header.dart';
-import 'package:social_media/widgets/post_tile.dart';
-import 'package:social_media/widgets/progress.dart';
-import 'package:social_media/widgets/post.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:social_media/pages/chat_screen.dart';
 import 'package:social_media/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,11 +15,24 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context,
-          isHomeTitle: true,
-          removeLeading: true,
-          background: Colors.black,
-          color: Colors.white),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.black,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          'Devs Circle',
+        style: TextStyle(fontSize: 17),
+        ),
+       actions: [
+         IconButton(
+            onPressed: () => Navigator.push(context, MaterialPageRoute(
+              builder: (_) => ChatScreen()
+            )),
+            icon: Icon(Icons.sms_outlined, color: Colors.white,),
+          )
+       ],
+      ),
       backgroundColor: Colors.black,
       body: FutureBuilder(
         future: getPhotosItems(),

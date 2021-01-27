@@ -31,6 +31,7 @@ final followersRef = FirebaseFirestore.instance.collection('followers');
 final followingRef = FirebaseFirestore.instance.collection('following');
 final timelineRef = FirebaseFirestore.instance.collection('timeline');
 final allusersPostsRef = FirebaseFirestore.instance.collection('allusersPosts');
+final mensagesRef = FirebaseFirestore.instance.collection('mensages');
 
 // a date time called timeStamp that will be helpful to organize our user data
 final Timestamp timeStamp = Timestamp.now();
