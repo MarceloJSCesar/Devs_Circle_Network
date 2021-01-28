@@ -113,19 +113,19 @@ class _UploadState extends State<Upload>
   // functions handle to take a photo and to choose from galerry
   handleTakePhoto() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(
+    File fileCamera = await ImagePicker.pickImage(
         source: ImageSource.camera, maxHeight: 575, maxWidth: 960);
     setState(() {
-      this.file = file;
+      this.file = fileCamera;
     });
   }
 
   handleChoosePhotoFromGallery() async {
     Navigator.pop(context);
-    File file = await ImagePicker.pickImage(
+    File fileGallery = await ImagePicker.pickImage(
         source: ImageSource.gallery, maxHeight: 575, maxWidth: 960);
     setState(() {
-      this.file = file;
+      this.file = fileGallery;
     });
   }
 

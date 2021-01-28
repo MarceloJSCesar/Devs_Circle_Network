@@ -63,13 +63,21 @@ class _ToDoPageState extends State<ToDoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(
-        context,
-        isHomeTitle: false,
-        titleText: 'ToDo List',
-        color: Colors.white,
-        background: Colors.black,
-        removeLeading: false,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        elevation: 0,
+        title: Text(
+          'ToDo List',
+          style: TextStyle(
+              color: Colors.white, fontSize: 25, fontFamily: 'Signatra'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.clear_all, color: Colors.white),
+            onPressed: clearAllToDo,
+          ),
+        ],
       ),
       backgroundColor: Colors.black,
       body: Column(
@@ -82,25 +90,25 @@ class _ToDoPageState extends State<ToDoPage> {
                   child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(10)),
                     child: TextField(
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
+                      style: TextStyle(color: Colors.white),
                       controller: _toDoController,
                       decoration: InputDecoration(
                         labelText: 'Errands',
                         hintText: 'type your tasks here ...',
                         hintStyle: TextStyle(color: Colors.white, fontSize: 15),
-                        labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                        labelStyle:
+                            TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 RaisedButton(
                   child: Text(
                     'Add',
@@ -114,9 +122,9 @@ class _ToDoPageState extends State<ToDoPage> {
                             return AlertDialog(
                               backgroundColor: Colors.greenAccent,
                               content: Text(
-                                  'Please Fill The Blanks To Get Add Your Errands ! Enjoy ',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                                'Please Fill The Blanks To Get Add Your Errands ! Enjoy ',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             );
                           });
                     } else {
@@ -131,13 +139,15 @@ class _ToDoPageState extends State<ToDoPage> {
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(10,40,10,0),
+              margin: const EdgeInsets.fromLTRB(10, 40, 10, 0),
               child: RefreshIndicator(
                 color: Colors.white,
                 backgroundColor: Colors.greenAccent,
                 onRefresh: _refresh,
                 child: ListView.builder(
-                    itemCount: _toDoList.length, itemBuilder: _buildListTile,),
+                  itemCount: _toDoList.length,
+                  itemBuilder: _buildListTile,
+                ),
               ),
             ),
           ),
@@ -163,12 +173,12 @@ class _ToDoPageState extends State<ToDoPage> {
       child: Container(
         margin: EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
-          color: Colors.grey[700],
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(20)
-        ),
+            color: Colors.grey[700],
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(20)),
         child: CheckboxListTile(
-          title: Text(_toDoList[index]["title"],
+          title: Text(
+            _toDoList[index]["title"],
             style: TextStyle(color: Colors.white),
           ),
           value: _toDoList[index]["Ok"],
@@ -181,7 +191,8 @@ class _ToDoPageState extends State<ToDoPage> {
           },
           secondary: CircleAvatar(
             child: Icon(
-              _toDoList[index]["Ok"] ? Icons.check : Icons.home_work_outlined,color: Colors.white,
+              _toDoList[index]["Ok"] ? Icons.check : Icons.home_work_outlined,
+              color: Colors.white,
             ),
           ),
         ),
@@ -194,7 +205,8 @@ class _ToDoPageState extends State<ToDoPage> {
           _saveData();
 
           final snack = SnackBar(
-            content: Text('Errands \" ${_lastRemoved["title"]} \" Removed',
+            content: Text(
+              'Errands \" ${_lastRemoved["title"]} \" Removed',
               style: TextStyle(color: Colors.white),
             ),
             action: SnackBarAction(

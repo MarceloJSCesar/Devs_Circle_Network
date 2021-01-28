@@ -68,7 +68,8 @@ class ViewerNews extends StatelessWidget {
                   text: data['description'],
                   style: TextStyle(color: Colors.grey[300], fontSize: 15),
                 )
-              ]),
+              ], 
+            ),
         ),
       ],
     );

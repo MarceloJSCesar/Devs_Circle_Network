@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/pages/home.dart';
+import 'package:social_media/pages/menu/pages/markdown_page.dart';
 import 'package:social_media/pages/menu/pages/todolist_page.dart';
 
 class MenuPage extends StatefulWidget {
@@ -33,8 +34,8 @@ class _MenuPageState extends State<MenuPage> {
               accountEmail: Text(widget.currentUser.email),
             ),
             SizedBox(height: 30),
-            _listTile(text: 'Accebilities'),
             _listTile(text: 'ToDo List', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ToDoPage()))),
+            _listTile(text: 'MarkDown Editor', onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MarkDownScreen()))),
             _listTile(text: 'Light Theme'),
             _listTile(text: 'Profile Settings '),
             _listTile(text: 'Help'),
