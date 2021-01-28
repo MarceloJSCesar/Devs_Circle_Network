@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,13 +12,12 @@ import 'package:social_media/pages/profile.dart';
 import 'package:social_media/pages/search.dart';
 import 'package:social_media/pages/timeline.dart';
 import 'package:social_media/pages/upload.dart';
-import 'package:social_media/widgets/user_login.dart';
 
 // a google sign in variable to can sign with google
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
 // creating this user to can provider userData to another pages
-User currentUser;
+UserData currentUser;
 
 // a storage ref
 final Reference storageRef = FirebaseStorage.instance.ref();
@@ -35,6 +35,8 @@ final mensagesRef = FirebaseFirestore.instance.collection('mensages');
 
 // a date time called timeStamp that will be helpful to organize our user data
 final Timestamp timeStamp = Timestamp.now();
+
+final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 class Home extends StatefulWidget {
   @override
@@ -60,9 +62,17 @@ class _HomeState extends State<Home> {
 
   // a function to logout , without auth yet
   void login() async {
-    await googleSignIn
-        .signIn()
-        .then((data) => print('login with google: sucess'));
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+    final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken);
+    await firebaseAuth.signInWithCredential(credential);
+
+    // await googleSignIn
+    //     .signIn()
+    //     .then((data) => print('login with google: sucess'));
   }
 
   @override
@@ -123,7 +133,7 @@ class _HomeState extends State<Home> {
       });
       doc = await userRef.doc(user.id).get();
     }
-    currentUser = User.fromDocument(doc);
+    currentUser = UserData.fromDocument(doc);
     print(currentUser);
     print(currentUser.name);
   }
@@ -156,57 +166,45 @@ class _HomeState extends State<Home> {
   Scaffold _buildUnAuthScreen(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor
-              ]),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 250,
-              ),
-              Text(
-                'Devs Circle',
-                style: TextStyle(
-                    color: Colors.white, fontSize: 40, fontFamily: 'Signatra'),
-              ),
-              Divider(),
-              GestureDetector(
-                  child: Container(
-                    height: 50,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/images/google_signin_button.png',
-                          ),
-                          fit: BoxFit.cover),
-                    ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 250,
+            ),
+            Text(
+              'Devs Circle',
+              style: TextStyle(
+                  color: Colors.white, fontSize: 40, fontFamily: 'Signatra'),
+            ),
+            Divider(),
+            GestureDetector(
+                child: Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/images/google_signin_button.png',
+                        ),
+                        fit: BoxFit.cover),
                   ),
-                  onTap: login),
-              SizedBox(
-                height: 300,
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'Developed by Marcelo Cesar',
-                  style: TextStyle(
-                      color: Colors.white, fontStyle: FontStyle.italic),
                 ),
+                onTap: login),
+            SizedBox(
+              height: 300,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(
+                'Developed by Marcelo Cesar',
+                style:
+                    TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

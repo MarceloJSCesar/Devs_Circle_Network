@@ -23,14 +23,21 @@ class _ActivityFeedState extends State<ActivityFeed> {
           background: Colors.black,
           color: Colors.white,
           removeLeading: true),
-          backgroundColor: Colors.black,
+      backgroundColor: Colors.black,
       body: Container(
         child: FutureBuilder(
           future: getActividyFeed(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              print('Builersnapshot: ${snapshot.data}');
-              return circularProgress();
+              return Center(
+                child: Text(
+                  'No notification yet',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18
+                  ),
+                ),
+              );
             }
             return ListView(children: snapshot.data);
           },
@@ -98,19 +105,21 @@ class ActivityFeedItem extends StatelessWidget {
   configureMediaPreview(context) {
     if (type == 'type' || type == 'comment') {
       mediaPreview = Container(
-          height: 50.0,
-          width: 60.0,
+        height: 50.0,
+        width: 60.0,
         child: GestureDetector(
-          onTap: () => showPost(context, postIde: postId, userIde: currentUser.id),
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: CachedNetworkImageProvider(mediaUrl),)),
-              ),
+          onTap: () =>
+              showPost(context, postIde: postId, userIde: currentUser.id),
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                fit: BoxFit.fill,
+                image: CachedNetworkImageProvider(mediaUrl),
+              )),
             ),
+          ),
         ),
       );
     } else {
@@ -144,9 +153,13 @@ class ActivityFeedItem extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: username,
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
                   ),
-                  TextSpan(text: ' $actividyItemText',style: TextStyle(color: Colors.white),),
+                  TextSpan(
+                    text: ' $actividyItemText',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
@@ -154,7 +167,8 @@ class ActivityFeedItem extends StatelessWidget {
           leading: CircleAvatar(
               backgroundImage: CachedNetworkImageProvider(userProfileImg)),
           subtitle: Text(
-            timeago.format(timestamp.toDate()), style: TextStyle(color: Colors.white),
+            timeago.format(timestamp.toDate()),
+            style: TextStyle(color: Colors.white),
             overflow: TextOverflow.ellipsis,
           ),
           trailing: mediaPreview,
@@ -164,7 +178,7 @@ class ActivityFeedItem extends StatelessWidget {
   }
 
   // function to show other photo page , the photo where they clicked
-  showPost(context,{String postIde, userIde}) {
+  showPost(context, {String postIde, userIde}) {
     Navigator.push(
         context,
         MaterialPageRoute(

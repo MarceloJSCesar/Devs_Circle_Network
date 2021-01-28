@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/pages/home.dart';
 
@@ -18,9 +16,9 @@ class _NewMessageState extends State<NewMessage> {
     mensagesRef.doc(user.id).collection('chat').add({
       'text': _enteredMessage,
       'createdAt': timeStamp,
-      'userId': user.id,
-      'username': user.displayName,
-      'userImg': user.photoUrl
+      'userId': currentUser.id,
+      'username': currentUser.name,
+      'userImg': currentUser.photoUrl
     });
     setState(() {
       _controller.text = '';
@@ -43,9 +41,10 @@ class _NewMessageState extends State<NewMessage> {
               autocorrect: true,
               textCapitalization: TextCapitalization.sentences,
               enableSuggestions: true,
-              decoration: InputDecoration.collapsed(
+              decoration: InputDecoration(
                   hintText: 'send a message ...',
-                  hintStyle: TextStyle(color: Colors.white)),
+                  hintStyle: TextStyle(color: Colors.white),
+                  ),
               onChanged: (value) {
                 setState(() {
                   _enteredMessage = value;

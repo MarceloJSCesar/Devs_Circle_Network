@@ -16,7 +16,7 @@ import 'package:uuid/uuid.dart';
 
 class Upload extends StatefulWidget {
   // varible to get user from home page
-  final User currentUser;
+  final UserData currentUser;
 
   Upload({this.currentUser});
   @override
@@ -309,7 +309,7 @@ class _UploadState extends State<Upload>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           SvgPicture.asset(
-            'assets/images/upload.svg',
+            'assets/images/nicubunu_Game_baddie_Sunglasser.svg',
             height: 260.0,
           ),
           SizedBox(

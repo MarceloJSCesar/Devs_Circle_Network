@@ -15,7 +15,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   // bool to check if is loading and a currentuser from User modal
   bool isLoading = false;
-  User user;
+  UserData user;
 
   // controllers to our two textField
   TextEditingController nameController = TextEditingController();
@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
       isLoading = true;
     });
     DocumentSnapshot doc = await userRef.doc(widget.currentUserId).get();
-    user = User.fromDocument(doc);
+    user = UserData.fromDocument(doc);
     nameController.text = user.name;
     bioController.text = user.bio;
     setState(() {
@@ -69,13 +69,6 @@ class _EditProfileState extends State<EditProfile> {
     _scaffoldkey.currentState.showSnackBar(snackBar);
   }
 
-  // a function to logout and forward user to homePage
-  logout() async {
-    await googleSignIn.signOut();
-    Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (_) => Home()
-    ));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,20 +126,6 @@ class _EditProfileState extends State<EditProfile> {
                       child: Text('Update Profile'),
                       onPressed: updateProfileData,
                       color: Colors.grey[300],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: FlatButton.icon(
-                        icon: Icon(
-                          Icons.logout,
-                          color: Colors.red,
-                        ),
-                        label: Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: logout,
-                      ),
                     ),
                   ],
                 ),

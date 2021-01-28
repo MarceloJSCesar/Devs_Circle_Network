@@ -16,12 +16,12 @@ class MyApp extends StatelessWidget {
       title: 'Social Media Exercise',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          iconTheme: IconThemeData(
-            color: Colors.black,
-          ),
-          primaryColor: Colors.purple,
-          accentColor: Colors.teal),
-          home: googleSignIn.currentUser != null ? Home() : SlidePage(),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
+        primaryColor: Colors.black,
+        accentColor: Colors.teal),
+        home: googleSignIn.currentUser != null ? Home() : Home()
     );
   }
 }

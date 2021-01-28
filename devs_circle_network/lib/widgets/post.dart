@@ -111,7 +111,7 @@ class _PostState extends State<Post> {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        User user = User.fromDocument(snapshot.data);
+        UserData user = UserData.fromDocument(snapshot.data);
         bool isPostOwner = currentUserId == ownerId;
         return ListTile(
           leading: CircleAvatar(

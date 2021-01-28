@@ -92,16 +92,13 @@ class _SearchState extends State<Search>
           shrinkWrap: true,
           children: <Widget>[
             SvgPicture.asset(
-              'assets/images/search.svg',
+              'assets/images/earth-and-magnify-glass.svg',
               height: 300,
-            ),
-            SizedBox(
-              height: 10,
             ),
             Text(
               'Find Users',
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 25,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w300),
@@ -126,7 +123,7 @@ class _SearchState extends State<Search>
         // picking user snapshot(data) for each user
         snapshot.data.docs.forEach((doc) {
           // picking the data through our User document of User class created before
-          User user = User.fromDocument(doc);
+          UserData user = UserData.fromDocument(doc);
           UserResult searchResult = UserResult(user);
           // our List userResults will receive as data our User user
           userResults.add(searchResult);
@@ -140,7 +137,7 @@ class _SearchState extends State<Search>
 }
 
 class UserResult extends StatelessWidget {
-  final User user;
+  final UserData user;
   UserResult(this.user);
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 // the model user to provide the data that will be saved in users firebase collections
-class User {
+class UserData {
   final String id;
   final String name;
   final String email;
@@ -11,7 +11,7 @@ class User {
   final String bio;
   final Timestamp timeStamp;
 
-  User(
+  UserData(
       {this.id,
       this.bio,
       this.name,
@@ -20,8 +20,8 @@ class User {
       this.timeStamp,
       this.displayName});
 
-  factory User.fromDocument(DocumentSnapshot doc) {
-    return User(
+  factory UserData.fromDocument(DocumentSnapshot doc) {
+    return UserData(
         id: doc['id'],
         bio: doc['bio'],
         name: doc['name'],

@@ -15,18 +15,8 @@ class _SlidePageState extends State<SlidePage> {
     return Scaffold(
       // my key to get notify something
       key: _scaffoldKey,
+      backgroundColor: Colors.black,
       body: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor
-              ]),
-        ),
-        child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +75,6 @@ class _SlidePageState extends State<SlidePage> {
                 ),
               ],
             ),
-        ),
         ),
     );
   }

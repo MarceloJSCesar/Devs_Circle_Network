@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:social_media/models/user.dart';
 import 'package:social_media/pages/edit_profile.dart';
 import 'package:social_media/pages/home.dart';
+import 'package:social_media/widgets/header.dart';
 import 'package:social_media/widgets/post.dart';
 import 'package:social_media/widgets/post_tile.dart';
 import 'package:social_media/widgets/progress.dart';
@@ -99,6 +100,14 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: header(
+        context,
+        isHomeTitle: false,
+        titleText: 'Profile',
+        background: Colors.black,
+        color: Colors.white,
+        removeLeading: true
+      ),
       backgroundColor: Colors.black,
         body: FutureBuilder(
             future: userRef.doc(widget.profileId).get(),
@@ -106,7 +115,7 @@ class _ProfileState extends State<Profile> {
               if (!snapshot.hasData) {
                 return circularProgress();
               }
-              User user = User.fromDocument(snapshot.data);
+              UserData user = UserData.fromDocument(snapshot.data);
               return SingleChildScrollView(
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(10,0,10,0),
@@ -176,7 +185,7 @@ class _ProfileState extends State<Profile> {
             Icons.grid_on,
           ),
           color: _posOrientation == 'grid'
-              ? Theme.of(context).primaryColor
+              ? Colors.white
               : Colors.grey,
           onPressed: () => setPostOrientation('grid'),
         ),
@@ -185,7 +194,7 @@ class _ProfileState extends State<Profile> {
             Icons.list,
           ),
           color: _posOrientation == 'list'
-              ? Theme.of(context).primaryColor
+              ? Colors.white
               : Colors.grey,
           onPressed: () => setPostOrientation('list'),
         ),
@@ -220,7 +229,7 @@ class _ProfileState extends State<Profile> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SvgPicture.asset(
-              'assets/images/no_content.svg',
+              'assets/images/camera-icon.svg',
               height: 260.0,
             ),
             SizedBox(
@@ -228,9 +237,9 @@ class _ProfileState extends State<Profile> {
             ),
             Text('No Post Yet',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20)),
+                    fontSize: 18)),
           ],
         ),
       );

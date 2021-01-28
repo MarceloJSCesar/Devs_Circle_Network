@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:social_media/models/user.dart';
 import 'package:social_media/pages/chat_screen.dart';
 import 'package:social_media/pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media/pages/menu/menu_page.dart';
 
 class Timeline extends StatefulWidget {
-  final currentUser;
+  final UserData currentUser;
   Timeline({this.currentUser});
   @override
   _TimelineState createState() => _TimelineState();
@@ -15,39 +17,44 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.black,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          'Devs Circle',
-        style: TextStyle(fontSize: 17),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            'Devs Circle',
+            style: TextStyle(fontSize: 25, fontFamily: 'Signatra'),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => ChatScreen())),
+              icon: Icon(
+                Icons.sms_outlined,
+                color: Colors.white,
+              ),
+            ),
+          ],
+          leading: IconButton(
+            icon: Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => MenuPage(
+                          currentUser: widget.currentUser,
+                        ))),
+          ),
         ),
-       actions: [
-         IconButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(
-              builder: (_) => ChatScreen()
-            )),
-            icon: Icon(Icons.sms_outlined, color: Colors.white,),
-          )
-       ],
-      ),
-      backgroundColor: Colors.black,
-      body: FutureBuilder(
-        future: getPhotosItems(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-                child: Text(
-              'No posts yet',
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ));
-          }
-          return Container();
-        },
-      ),
-    );
+        backgroundColor: Colors.black,
+        body: Center(
+            child: Text(
+          'No posts yet',
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        )));
   }
 }
 

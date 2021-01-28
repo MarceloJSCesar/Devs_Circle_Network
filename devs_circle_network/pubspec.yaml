@@ -39,6 +39,10 @@ dependencies:
   animator: ^2.0.2
   path_provider: ^1.6.27
   timeago: ^2.0.17
+  share: ^0.6.5+4
+  url_launcher: ^5.7.10
+  font_awesome_flutter: ^8.11.0
+  transparent_image: ^1.0.0
   cached_network_image: 
   firebase_messaging: 
   flutter_svg: 
@@ -62,9 +66,13 @@ flutter:
       fonts:
         - asset: assets/fonts/Signatra.ttf
   assets:
-    - assets/images/google_signin_button.png
-    - assets/images/upload.svg
-    - assets/images/search.svg
-    - assets/images/activity_feed.svg
-    - assets/images/no_content.svg 
-    - assets/images/holding_phone.png
+    - assets/images/
+
+    # google_signin_button.png
+    # - assets/images/nicubunu_Game_baddie_Sunglasser.svg
+    # - assets/images/no-camera-sign.svg
+    # - assets/images/earth-and-magnify-glass.svg
+    # - assets/images/activity_feed.svg
+    # - assets/images/camera-icon.svg 
+    # - assets/images/holding_phone.png
+    # - assets/images/todo_list_greenAccent.png
