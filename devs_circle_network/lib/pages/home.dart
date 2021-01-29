@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                 ),
                 onTap: login),
             SizedBox(
-              height: 300,
+              height: 200,
             ),
             Container(
               alignment: Alignment.center,

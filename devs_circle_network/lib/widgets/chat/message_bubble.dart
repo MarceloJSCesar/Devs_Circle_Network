@@ -13,7 +13,8 @@ class MessageBubble extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Row(
-          mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment: isMe ? MainAxisAlignment.end : 
+          MainAxisAlignment.start,
           children: <Widget>[
             Container(
                 width: 140,
@@ -24,8 +25,8 @@ class MessageBubble extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
-                    bottomLeft: !isMe ? Radius.circular(0) : Radius.circular(12),
-                    bottomRight: isMe ? Radius.circular(0) : Radius.circular(12),
+                    bottomLeft: isMe ? Radius.circular(0) : Radius.circular(12),
+                    bottomRight: !isMe ? Radius.circular(0) : Radius.circular(12),
                   ),
                 ),
                 child: Column(
@@ -42,7 +43,7 @@ class MessageBubble extends StatelessWidget {
                     ),
                     Text(
                       message,
-                      textAlign: !isMe ? TextAlign.start : TextAlign.end,
+                      textAlign: isMe ? TextAlign.start : TextAlign.end,
                       style: TextStyle(
                           color: !isMe ? Colors.white : Colors.black, fontSize: 15),
                     ),
@@ -52,8 +53,8 @@ class MessageBubble extends StatelessWidget {
         ),
         Positioned(
           top: 0,
-          left: !isMe ? 120 : null,
-          right: !isMe? null : 120,
+          left: !isMe ? 125 : null,
+          right: !isMe ? null : 125,
           child: CircleAvatar(
             backgroundImage: NetworkImage(userImg),
           )

@@ -29,7 +29,7 @@ class _NewMessageState extends State<NewMessage> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(10)),

@@ -88,7 +88,7 @@ class _ToDoPageState extends State<ToDoPage> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(1),
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.white),
                         borderRadius: BorderRadius.circular(10)),
@@ -97,11 +97,8 @@ class _ToDoPageState extends State<ToDoPage> {
                       style: TextStyle(color: Colors.white),
                       controller: _toDoController,
                       decoration: InputDecoration(
-                        labelText: 'Errands',
                         hintText: 'type your tasks here ...',
-                        hintStyle: TextStyle(color: Colors.white, fontSize: 15),
-                        labelStyle:
-                            TextStyle(color: Colors.white, fontSize: 18),
+                        hintStyle: TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ),
                   ),
